@@ -170,15 +170,17 @@ export function ProfilePage() {
           {/* Age, Height, Weight */}
           <div style={{ display: 'flex', gap: 8 }}>
             {[
-              { key: 'age', label: '年龄', unit: '岁', placeholder: '25' },
-              { key: 'height_cm', label: '身高', unit: 'cm', placeholder: '170' },
-              { key: 'weight_kg', label: '体重', unit: 'kg', placeholder: '65' },
+              { key: 'age', label: '年龄', unit: '岁', placeholder: '25', min: 1, max: 150 },
+              { key: 'height_cm', label: '身高', unit: 'cm', placeholder: '170', min: 30, max: 300 },
+              { key: 'weight_kg', label: '体重', unit: 'kg', placeholder: '65', min: 1, max: 500 },
             ].map((field) => (
               <div key={field.key} className="glass-card" style={{ borderRadius: 16, padding: '12px 14px', flex: 1 }}>
                 <p style={{ color: 'rgba(245,245,247,0.45)', fontSize: 12, marginBottom: 4 }}>{field.label}</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
                   <input
                     type="number"
+                    min={field.min}
+                    max={field.max}
                     value={form[field.key as keyof typeof form] as string | number}
                     onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
                     placeholder={field.placeholder}
