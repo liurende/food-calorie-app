@@ -46,6 +46,17 @@ def init_db():
             fat_g REAL,
             confidence REAL
         );
+
+        CREATE TABLE IF NOT EXISTS user_profiles (
+            user_id TEXT PRIMARY KEY,
+            name TEXT DEFAULT '',
+            gender TEXT DEFAULT '' CHECK(gender IN ('', 'male', 'female')),
+            age INTEGER,
+            height_cm REAL,
+            weight_kg REAL,
+            activity_level TEXT DEFAULT 'moderate' CHECK(activity_level IN ('sedentary','light','moderate','active','very_active')),
+            updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+        );
     """)
     conn.commit()
     conn.close()

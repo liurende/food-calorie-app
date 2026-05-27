@@ -65,6 +65,17 @@ class RecognizeResult(BaseModel):
     confidence: float
 
 
+class UserProfile(BaseModel):
+    user_id: str
+    name: str = ""
+    gender: str = ""
+    age: Optional[int] = None
+    height_cm: Optional[float] = None
+    weight_kg: Optional[float] = None
+    activity_level: str = "moderate"
+    updated_at: Optional[str] = None
+
+
 class StatsResponse(BaseModel):
     date: date
     total_calories: float

@@ -43,3 +43,16 @@ export interface StatsData {
 export type MealType = 'breakfast' | 'lunch' | 'dinner' | 'snack';
 
 export type CaptureStep = 0 | 1 | 2;
+
+export type ActivityLevel = 'sedentary' | 'light' | 'moderate' | 'active' | 'very_active';
+
+export interface UserProfile {
+  user_id: string;
+  name?: string;
+  gender?: string;
+  age?: number | null;
+  height_cm?: number | null;
+  weight_kg?: number | null;
+  activity_level?: ActivityLevel;
+  updated_at?: string | null;
+}

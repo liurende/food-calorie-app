@@ -4,6 +4,7 @@ const tabs = [
   { path: '/', icon: '📊', label: '摘要' },
   { path: '/capture', icon: '📷', label: '拍照' },
   { path: '/history', icon: '📅', label: '历史' },
+  { path: '/profile', icon: '👤', label: '我的' },
 ];
 
 export function TabBar() {

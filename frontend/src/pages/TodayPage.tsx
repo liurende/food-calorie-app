@@ -7,18 +7,27 @@ import { MealCard } from '../components/MealCard';
 import type { Meal, StatsData } from '../types';
 
 const CURRENT_USER = 'default_user';
-const CALORIE_TARGET = 2000;
+const DEFAULT_TARGET = 2000;
 
 export function TodayPage() {
   const navigate = useNavigate();
   const [stats, setStats] = useState<StatsData | null>(null);
+  const [calorieTarget, setCalorieTarget] = useState(DEFAULT_TARGET);
   const [loading, setLoading] = useState(true);
 
   const today = new Date().toISOString().slice(0, 10);
 
   useEffect(() => {
-    api.getStats(CURRENT_USER, 'daily', today)
-      .then(setStats)
+    Promise.all([
+      api.getStats(CURRENT_USER, 'daily', today),
+      api.getProfile(CURRENT_USER),
+    ])
+      .then(([statsData, profileData]) => {
+        setStats(statsData);
+        if (profileData.tdee) {
+          setCalorieTarget(profileData.tdee);
+        }
+      })
       .catch(console.error)
       .finally(() => setLoading(false));
   }, []);
@@ -44,7 +53,7 @@ export function TodayPage() {
       <div style={{ textAlign: 'center', padding: '8px 0 24px' }}>
         <ProgressRing
           current={stats?.total_calories ?? 0}
-          target={CALORIE_TARGET}
+          target={calorieTarget}
         />
       </div>
 

@@ -48,4 +48,18 @@ export const api = {
       protein_per_100g?: number; carbs_per_100g?: number; fat_per_100g?: number;
       category?: string;
     }>>(`/foods/search?q=${encodeURIComponent(q)}`),
+
+  getProfile: (userId: string) =>
+    request<{
+      profile: import('../types').UserProfile | null;
+      bmr: number | null;
+      tdee: number | null;
+    }>(`/profile?user_id=${userId}`),
+
+  updateProfile: (profile: import('../types').UserProfile) =>
+    request<{
+      profile: import('../types').UserProfile;
+      bmr: number | null;
+      tdee: number | null;
+    }>('/profile', { method: 'PUT', body: JSON.stringify(profile) }),
 };
