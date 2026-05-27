@@ -67,17 +67,18 @@ export function CapturePage() {
       <div style={{
         display: 'flex', flexDirection: 'column', alignItems: 'center',
         justifyContent: 'center', minHeight: '100vh', padding: 40,
+        background: '#F2F2F7',
       }}>
         <div style={{
           width: 60, height: 60, borderRadius: '50%',
-          border: '3px solid rgba(255,255,255,0.1)',
-          borderTopColor: '#F5F5F7',
+          border: '3px solid rgba(60,60,67,0.1)',
+          borderTopColor: '#007AFF',
           animation: 'spin 1s linear infinite',
           marginBottom: 24,
         }} />
         <style>{`@keyframes spin { to { transform: rotate(360deg); } }`}</style>
-        <p style={{ color: '#F5F5F7', fontSize: 17, fontWeight: 500 }}>正在分析食物...</p>
-        <p style={{ color: 'rgba(245,245,247,0.4)', fontSize: 14, marginTop: 8 }}>
+        <p style={{ color: '#1C1C1E', fontSize: 17, fontWeight: 500 }}>正在分析食物...</p>
+        <p style={{ color: 'rgba(60,60,67,0.5)', fontSize: 14, marginTop: 8 }}>
           估算重量与热量中
         </p>
       </div>
@@ -85,10 +86,11 @@ export function CapturePage() {
   }
 
   return (
-    <div style={{ background: '#000', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+    <div style={{ background: '#F2F2F7', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
+      {/* Home indicator spacer */}
       <div style={{ padding: '12px 12px 0' }}>
         <div style={{
-          width: 126, height: 36, background: '#000', borderRadius: 20, margin: '0 auto',
+          width: 126, height: 36, borderRadius: 20, margin: '0 auto',
         }} />
       </div>
 
@@ -96,7 +98,7 @@ export function CapturePage() {
         <button className="btn-ghost" onClick={() => { stopCamera(); navigate('/'); }}>
           取消
         </button>
-        <span style={{ color: '#F5F5F7', fontSize: 17, fontWeight: 600, letterSpacing: -0.2 }}>
+        <span style={{ color: '#1C1C1E', fontSize: 17, fontWeight: 600, letterSpacing: -0.2 }}>
           记录餐食
         </span>
         <span style={{ width: 50 }} />
@@ -108,12 +110,13 @@ export function CapturePage() {
             width: i === step ? 28 : 4,
             height: 4,
             borderRadius: 2,
-            background: i <= step ? '#F5F5F7' : 'rgba(245,245,247,0.2)',
+            background: i <= step ? '#1C1C1E' : 'rgba(60,60,67,0.15)',
             transition: 'all 0.3s ease',
           }} />
         ))}
       </div>
 
+      {/* Camera viewfinder */}
       <div style={{ margin: '0 20px', flex: 1, position: 'relative' }}>
         {streaming && (
           <video
@@ -123,7 +126,8 @@ export function CapturePage() {
             muted
             style={{
               width: '100%', height: '100%', objectFit: 'cover',
-              borderRadius: 36, border: '1px solid rgba(255,255,255,0.08)',
+              borderRadius: 36, border: '1px solid rgba(60,60,67,0.08)',
+              background: '#000',
             }}
           />
         )}
@@ -136,14 +140,14 @@ export function CapturePage() {
             position: 'absolute', top: '50%', left: '50%',
             transform: 'translate(-50%, -50%)',
             width: '60%', height: '60%',
-            border: '1px solid rgba(255,255,255,0.12)', borderRadius: 20,
+            border: '1px solid rgba(255,255,255,0.15)', borderRadius: 20,
           }}>
             {(['tl', 'tr', 'bl', 'br'] as const).map((pos) => {
               const style: Record<string, React.CSSProperties> = {
-                tl: { top: -1, left: -1, borderTop: '2px solid rgba(255,255,255,0.25)', borderLeft: '2px solid rgba(255,255,255,0.25)', borderRadius: '6px 0 0 0' },
-                tr: { top: -1, right: -1, borderTop: '2px solid rgba(255,255,255,0.25)', borderRight: '2px solid rgba(255,255,255,0.25)', borderRadius: '0 6px 0 0' },
-                bl: { bottom: -1, left: -1, borderBottom: '2px solid rgba(255,255,255,0.25)', borderLeft: '2px solid rgba(255,255,255,0.25)', borderRadius: '0 0 0 6px' },
-                br: { bottom: -1, right: -1, borderBottom: '2px solid rgba(255,255,255,0.25)', borderRight: '2px solid rgba(255,255,255,0.25)', borderRadius: '0 0 6px 0' },
+                tl: { top: -1, left: -1, borderTop: '2px solid rgba(255,255,255,0.3)', borderLeft: '2px solid rgba(255,255,255,0.3)', borderRadius: '6px 0 0 0' },
+                tr: { top: -1, right: -1, borderTop: '2px solid rgba(255,255,255,0.3)', borderRight: '2px solid rgba(255,255,255,0.3)', borderRadius: '0 6px 0 0' },
+                bl: { bottom: -1, left: -1, borderBottom: '2px solid rgba(255,255,255,0.3)', borderLeft: '2px solid rgba(255,255,255,0.3)', borderRadius: '0 0 0 6px' },
+                br: { bottom: -1, right: -1, borderBottom: '2px solid rgba(255,255,255,0.3)', borderRight: '2px solid rgba(255,255,255,0.3)', borderRadius: '0 0 6px 0' },
               };
               return <div key={pos} style={{ position: 'absolute', width: 20, height: 20, ...style[pos] }} />;
             })}
@@ -152,10 +156,10 @@ export function CapturePage() {
             position: 'absolute', bottom: 80, left: '50%', transform: 'translateX(-50%)',
             textAlign: 'center',
           }}>
-            <p style={{ color: 'rgba(255,255,255,0.28)', fontSize: 13, letterSpacing: 0.3, margin: 0 }}>
+            <p style={{ color: 'rgba(255,255,255,0.4)', fontSize: 13, letterSpacing: 0.3, margin: 0 }}>
               将食物置于框线内
             </p>
-            <p style={{ color: 'rgba(255,255,255,0.16)', fontSize: 12, letterSpacing: 0.3, margin: '2px 0 0' }}>
+            <p style={{ color: 'rgba(255,255,255,0.25)', fontSize: 12, letterSpacing: 0.3, margin: '2px 0 0' }}>
               保持手臂伸直 · 距离约 30cm
             </p>
           </div>
@@ -163,7 +167,7 @@ export function CapturePage() {
             position: 'absolute', bottom: 24, left: '50%', transform: 'translateX(-50%)',
             background: 'rgba(30,30,32,0.8)', backdropFilter: 'blur(40px)',
             WebkitBackdropFilter: 'blur(40px)', borderRadius: 24,
-            padding: '10px 24px', border: '1px solid rgba(255,255,255,0.06)',
+            padding: '10px 24px', border: '1px solid rgba(255,255,255,0.08)',
           }}>
             <p style={{
               color: '#F5F5F7', fontSize: 14, fontWeight: 500,
@@ -177,32 +181,33 @@ export function CapturePage() {
 
       <div style={{ padding: '20px 40px 12px', textAlign: 'center' }}>
         <p style={{
-          color: 'rgba(245,245,247,0.45)', fontSize: 15, fontWeight: 400,
+          color: 'rgba(60,60,67,0.6)', fontSize: 15, fontWeight: 400,
           letterSpacing: -0.2, margin: 0, lineHeight: 1.4, whiteSpace: 'pre-line',
         }}>
           {ANGLE_HINTS[step]}
         </p>
       </div>
 
+      {/* Shutter button */}
       <div style={{ display: 'flex', justifyContent: 'center', padding: '4px 0 20px' }}>
         <button
           onClick={handleCapture}
           style={{
-            width: 72, height: 72, borderRadius: '50%', border: '3px solid rgba(245,245,247,0.2)',
+            width: 72, height: 72, borderRadius: '50%', border: '3px solid rgba(60,60,67,0.15)',
             background: 'none', cursor: 'pointer', display: 'flex',
             alignItems: 'center', justifyContent: 'center', padding: 0,
           }}
         >
           <div style={{
             width: 58, height: 58, borderRadius: '50%',
-            background: 'linear-gradient(180deg, #F5F5F7 0%, #D1D1D6 100%)',
+            background: 'linear-gradient(180deg, #E5E5EA 0%, #C7C7CC 100%)',
           }} />
         </button>
       </div>
 
       <div style={{ display: 'flex', justifyContent: 'space-between', padding: '0 32px 40px' }}>
-        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(255,255,255,0.08)' }} />
-        <div style={{ width: 40, height: 40, borderRadius: 12, background: 'rgba(255,255,255,0.08)' }} />
+        <div style={{ width: 40, height: 40, borderRadius: 12 }} />
+        <div style={{ width: 40, height: 40, borderRadius: 12 }} />
       </div>
     </div>
   );

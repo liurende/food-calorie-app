@@ -71,25 +71,25 @@ export function TodayPage() {
               key={type}
               className="glass-card"
               style={{
-                display: 'flex', alignItems: 'center', gap: 14, opacity: 0.4,
+                display: 'flex', alignItems: 'center', gap: 14, opacity: 0.5,
               }}
             >
               <div style={{
                 width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-                background: 'rgba(255,255,255,0.03)',
+                background: 'rgba(60,60,67,0.04)',
                 display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
               }}>
                 {{ breakfast: '🌅', lunch: '☀️', dinner: '🌙', snack: '🍪' }[type]}
               </div>
               <div style={{ flex: 1 }}>
-                <p style={{ color: '#F5F5F7', fontSize: 16, fontWeight: 500, margin: 0 }}>
+                <p style={{ color: '#1C1C1E', fontSize: 16, fontWeight: 500, margin: 0 }}>
                   {{ breakfast: '早餐', lunch: '午餐', dinner: '晚餐', snack: '零食' }[type]}
                 </p>
-                <p style={{ color: 'rgba(245,245,247,0.2)', fontSize: 13, margin: '2px 0 0' }}>
+                <p style={{ color: 'rgba(60,60,67,0.3)', fontSize: 13, margin: '2px 0 0' }}>
                   还没有记录
                 </p>
               </div>
-              <span style={{ color: 'rgba(245,245,247,0.2)', fontSize: 16 }}>--</span>
+              <span style={{ color: 'rgba(60,60,67,0.2)', fontSize: 16 }}>--</span>
             </div>
           );
         })}
@@ -97,7 +97,7 @@ export function TodayPage() {
 
       <div style={{ padding: '20px 20px 8px' }}>
         <button className="btn-primary" onClick={() => navigate('/capture')}>
-          📷  拍照记录餐食
+          拍照记录餐食
         </button>
       </div>
 

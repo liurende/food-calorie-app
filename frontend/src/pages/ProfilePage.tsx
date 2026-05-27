@@ -89,36 +89,36 @@ export function ProfilePage() {
       {hasAllStats && bmr && tdee && (
         <div style={{ padding: '0 20px 16px' }}>
           <div className="glass-card" style={{ borderRadius: 20, padding: '20px 24px' }}>
-            <p style={{ color: 'rgba(245,245,247,0.45)', fontSize: 13, margin: 0, marginBottom: 12 }}>
+            <p style={{ color: 'rgba(60,60,67,0.6)', fontSize: 13, margin: 0, marginBottom: 12 }}>
               每日能量需求
             </p>
             <div style={{ display: 'flex', justifyContent: 'space-around', textAlign: 'center' }}>
               <div>
-                <p style={{ color: 'rgba(245,245,247,0.35)', fontSize: 11, margin: '0 0 4px' }}>基础代谢</p>
-                <p style={{ color: '#F5F5F7', fontSize: 28, fontWeight: 500, margin: 0, letterSpacing: -1 }}>
+                <p style={{ color: 'rgba(60,60,67,0.45)', fontSize: 11, margin: '0 0 4px' }}>基础代谢</p>
+                <p style={{ color: '#1C1C1E', fontSize: 28, fontWeight: 500, margin: 0, letterSpacing: -1 }}>
                   {bmr}
                 </p>
-                <p style={{ color: 'rgba(245,245,247,0.35)', fontSize: 11, margin: '2px 0 0' }}>BMR · 千卡</p>
+                <p style={{ color: 'rgba(60,60,67,0.45)', fontSize: 11, margin: '2px 0 0' }}>BMR · 千卡</p>
               </div>
-              <div style={{ width: 1, background: 'rgba(255,255,255,0.08)', borderRadius: 1 }} />
+              <div style={{ width: 1, background: 'rgba(60,60,67,0.08)', borderRadius: 1 }} />
               <div>
-                <p style={{ color: 'rgba(245,245,247,0.35)', fontSize: 11, margin: '0 0 4px' }}>每日消耗</p>
-                <p style={{ color: '#0A84FF', fontSize: 28, fontWeight: 500, margin: 0, letterSpacing: -1 }}>
+                <p style={{ color: 'rgba(60,60,67,0.45)', fontSize: 11, margin: '0 0 4px' }}>每日消耗</p>
+                <p style={{ color: '#007AFF', fontSize: 28, fontWeight: 500, margin: 0, letterSpacing: -1 }}>
                   {tdee}
                 </p>
-                <p style={{ color: 'rgba(245,245,247,0.35)', fontSize: 11, margin: '2px 0 0' }}>TDEE · 千卡</p>
+                <p style={{ color: 'rgba(60,60,67,0.45)', fontSize: 11, margin: '2px 0 0' }}>TDEE · 千卡</p>
               </div>
             </div>
             <div style={{
               marginTop: 14, padding: '10px 14px', borderRadius: 10,
-              background: 'rgba(10,132,255,0.08)', border: '1px solid rgba(10,132,255,0.12)',
+              background: 'rgba(0,122,255,0.06)', border: '1px solid rgba(0,122,255,0.1)',
             }}>
-              <p style={{ color: 'rgba(245,245,247,0.5)', fontSize: 12, margin: 0, lineHeight: 1.5 }}>
-                减脂建议摄入: <span style={{ color: '#F5F5F7', fontWeight: 500 }}>{Math.round(tdee * 0.8)} kcal</span>
+              <p style={{ color: 'rgba(60,60,67,0.6)', fontSize: 12, margin: 0, lineHeight: 1.5 }}>
+                减脂建议摄入: <span style={{ color: '#1C1C1E', fontWeight: 500 }}>{Math.round(tdee * 0.8)} kcal</span>
                 &nbsp;·&nbsp;
-                维持体重: <span style={{ color: '#F5F5F7', fontWeight: 500 }}>{tdee} kcal</span>
+                维持体重: <span style={{ color: '#1C1C1E', fontWeight: 500 }}>{tdee} kcal</span>
                 &nbsp;·&nbsp;
-                增肌建议摄入: <span style={{ color: '#F5F5F7', fontWeight: 500 }}>{Math.round(tdee * 1.1)} kcal</span>
+                增肌建议摄入: <span style={{ color: '#1C1C1E', fontWeight: 500 }}>{Math.round(tdee * 1.1)} kcal</span>
               </p>
             </div>
           </div>
@@ -132,13 +132,13 @@ export function ProfilePage() {
 
           {/* Name */}
           <div className="glass-card" style={{ borderRadius: 16, padding: '12px 16px' }}>
-            <p style={{ color: 'rgba(245,245,247,0.45)', fontSize: 12, marginBottom: 6 }}>昵称</p>
+            <p style={{ color: 'rgba(60,60,67,0.55)', fontSize: 12, marginBottom: 6 }}>昵称</p>
             <input
               value={form.name}
               onChange={(e) => setForm({ ...form, name: e.target.value })}
               placeholder="你的名字"
               style={{
-                width: '100%', background: 'none', border: 'none', color: '#F5F5F7',
+                width: '100%', background: 'none', border: 'none', color: '#1C1C1E',
                 fontSize: 16, outline: 'none', fontFamily: 'inherit',
               }}
             />
@@ -146,7 +146,7 @@ export function ProfilePage() {
 
           {/* Gender */}
           <div className="glass-card" style={{ borderRadius: 16, padding: '12px 16px' }}>
-            <p style={{ color: 'rgba(245,245,247,0.45)', fontSize: 12, marginBottom: 6 }}>性别</p>
+            <p style={{ color: 'rgba(60,60,67,0.55)', fontSize: 12, marginBottom: 6 }}>性别</p>
             <div style={{ display: 'flex', gap: 8 }}>
               {['male', 'female'].map((g) => (
                 <button
@@ -156,9 +156,9 @@ export function ProfilePage() {
                     flex: 1, padding: '10px 0', borderRadius: 12, border: 'none',
                     cursor: 'pointer', fontFamily: 'inherit', fontSize: 15, fontWeight: 500,
                     background: form.gender === g
-                      ? 'rgba(245,245,247,0.12)'
-                      : 'rgba(255,255,255,0.03)',
-                    color: form.gender === g ? '#F5F5F7' : 'rgba(245,245,247,0.3)',
+                      ? 'rgba(0,122,255,0.1)'
+                      : 'rgba(60,60,67,0.04)',
+                    color: form.gender === g ? '#007AFF' : 'rgba(60,60,67,0.35)',
                   }}
                 >
                   {GENDER_LABELS[g]}
@@ -175,7 +175,7 @@ export function ProfilePage() {
               { key: 'weight_kg', label: '体重', unit: 'kg', placeholder: '65', min: 1, max: 500 },
             ].map((field) => (
               <div key={field.key} className="glass-card" style={{ borderRadius: 16, padding: '12px 14px', flex: 1 }}>
-                <p style={{ color: 'rgba(245,245,247,0.45)', fontSize: 12, marginBottom: 4 }}>{field.label}</p>
+                <p style={{ color: 'rgba(60,60,67,0.55)', fontSize: 12, marginBottom: 4 }}>{field.label}</p>
                 <div style={{ display: 'flex', alignItems: 'baseline', gap: 3 }}>
                   <input
                     type="number"
@@ -185,12 +185,12 @@ export function ProfilePage() {
                     onChange={(e) => setForm({ ...form, [field.key]: e.target.value })}
                     placeholder={field.placeholder}
                     style={{
-                      width: '100%', background: 'none', border: 'none', color: '#F5F5F7',
+                      width: '100%', background: 'none', border: 'none', color: '#1C1C1E',
                       fontSize: 20, fontWeight: 500, outline: 'none', fontFamily: 'inherit',
                       letterSpacing: -0.5, MozAppearance: 'textfield',
                     }}
                   />
-                  <span style={{ color: 'rgba(245,245,247,0.3)', fontSize: 12, flexShrink: 0 }}>{field.unit}</span>
+                  <span style={{ color: 'rgba(60,60,67,0.35)', fontSize: 12, flexShrink: 0 }}>{field.unit}</span>
                 </div>
               </div>
             ))}
@@ -198,7 +198,7 @@ export function ProfilePage() {
 
           {/* Activity Level */}
           <div className="glass-card" style={{ borderRadius: 16, padding: '12px 16px' }}>
-            <p style={{ color: 'rgba(245,245,247,0.45)', fontSize: 12, marginBottom: 8 }}>活动水平</p>
+            <p style={{ color: 'rgba(60,60,67,0.55)', fontSize: 12, marginBottom: 8 }}>活动水平</p>
             <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
               {(Object.keys(ACTIVITY_LABELS) as ActivityLevel[]).map((level) => (
                 <button
@@ -208,9 +208,9 @@ export function ProfilePage() {
                     width: '100%', padding: '8px 12px', borderRadius: 10, border: 'none',
                     cursor: 'pointer', fontFamily: 'inherit', fontSize: 14, textAlign: 'left',
                     background: form.activity_level === level
-                      ? 'rgba(10,132,255,0.12)'
+                      ? 'rgba(0,122,255,0.08)'
                       : 'transparent',
-                    color: form.activity_level === level ? '#0A84FF' : 'rgba(245,245,247,0.4)',
+                    color: form.activity_level === level ? '#007AFF' : 'rgba(60,60,67,0.45)',
                     fontWeight: form.activity_level === level ? 500 : 400,
                   }}
                 >

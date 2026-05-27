@@ -22,30 +22,30 @@ export function MealCard({ meal, onClick }: MealCardProps) {
       className="glass-card"
       style={{
         display: 'flex', alignItems: 'center', gap: 14,
-        opacity: hasItems ? 1 : 0.4, cursor: onClick ? 'pointer' : undefined,
+        opacity: hasItems ? 1 : 0.6, cursor: onClick ? 'pointer' : undefined,
       }}
       onClick={onClick}
     >
       <div style={{
         width: 44, height: 44, borderRadius: 12, flexShrink: 0,
-        background: 'linear-gradient(135deg, rgba(255,159,10,0.15), rgba(255,159,10,0.05))',
+        background: 'linear-gradient(135deg, rgba(255,149,0,0.15), rgba(255,149,0,0.05))',
         display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 20,
       }}>
         {config.emoji}
       </div>
       <div style={{ flex: 1, minWidth: 0 }}>
-        <p style={{ color: '#F5F5F7', fontSize: 16, fontWeight: 500, margin: 0, letterSpacing: -0.3 }}>
+        <p style={{ color: '#1C1C1E', fontSize: 16, fontWeight: 500, margin: 0, letterSpacing: -0.3 }}>
           {config.label}
         </p>
         <p style={{
-          color: 'rgba(245,245,247,0.35)', fontSize: 13, margin: '2px 0 0',
+          color: 'rgba(60,60,67,0.5)', fontSize: 13, margin: '2px 0 0',
           overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
         }}>
           {hasItems ? foodNames : '还没有记录'}
         </p>
       </div>
       <span style={{
-        color: hasItems ? '#F5F5F7' : 'rgba(245,245,247,0.2)',
+        color: hasItems ? '#1C1C1E' : 'rgba(60,60,67,0.25)',
         fontSize: 16, fontWeight: hasItems ? 500 : 400, margin: 0, letterSpacing: -0.3, flexShrink: 0,
       }}>
         {hasItems ? Math.round(meal.total_calories ?? meal.items.reduce((s, i) => s + i.calories, 0)) : '--'}

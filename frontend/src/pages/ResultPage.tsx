@@ -22,7 +22,7 @@ export function ResultPage() {
   if (!state || results.length === 0) {
     return (
       <div style={{ padding: 40, textAlign: 'center' }}>
-        <p style={{ color: 'rgba(245,245,247,0.4)' }}>没有识别结果</p>
+        <p style={{ color: 'rgba(60,60,67,0.55)' }}>没有识别结果</p>
         <button className="btn-primary" onClick={() => navigate('/capture')} style={{ marginTop: 16 }}>
           去拍照
         </button>
@@ -71,7 +71,7 @@ export function ResultPage() {
         <button className="btn-ghost" onClick={() => navigate('/capture')}>
           ← 返回
         </button>
-        <span style={{ color: '#F5F5F7', fontSize: 17, fontWeight: 600 }}>分析结果</span>
+        <span style={{ color: '#1C1C1E', fontSize: 17, fontWeight: 600 }}>分析结果</span>
         <button
           className="btn-ghost"
           onClick={handleSave}
@@ -83,14 +83,14 @@ export function ResultPage() {
       </div>
 
       <div style={{ textAlign: 'center', padding: '8px 0 32px' }}>
-        <p style={{ color: 'rgba(245,245,247,0.45)', fontSize: 15, margin: 0 }}>预估总热量</p>
+        <p style={{ color: 'rgba(60,60,67,0.6)', fontSize: 15, margin: 0 }}>预估总热量</p>
         <p style={{
-          color: '#F5F5F7', fontSize: 80, fontWeight: 200, margin: 0,
+          color: '#000000', fontSize: 80, fontWeight: 200, margin: 0,
           letterSpacing: -3, lineHeight: 1,
         }}>
           {Math.round(totalCal)}
         </p>
-        <p style={{ color: 'rgba(245,245,247,0.35)', fontSize: 18, margin: '4px 0 0', letterSpacing: 0.5 }}>
+        <p style={{ color: 'rgba(60,60,67,0.45)', fontSize: 18, margin: '4px 0 0', letterSpacing: 0.5 }}>
           千卡
         </p>
       </div>
@@ -98,7 +98,7 @@ export function ResultPage() {
       <div style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: 8 }}>
         <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '0 4px 4px' }}>
           <span className="card-label">识别食物</span>
-          <span style={{ color: 'rgba(245,245,247,0.25)', fontSize: 12 }}>
+          <span style={{ color: 'rgba(60,60,67,0.35)', fontSize: 12 }}>
             基于 {state?.images?.length ?? 0} 张照片
           </span>
         </div>

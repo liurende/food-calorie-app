@@ -21,7 +21,6 @@ export function HistoryPage() {
 
   const allMeals = stats?.meals ?? [];
 
-  // Generate dates for the week picker
   const weekDates = Array.from({ length: 7 }, (_, i) => {
     const d = new Date();
     d.setDate(d.getDate() - d.getDay() + i);
@@ -39,7 +38,6 @@ export function HistoryPage() {
         <h1 className="title-large" style={{ marginTop: 2 }}>历史记录</h1>
       </div>
 
-      {/* Week date picker */}
       <div style={{
         display: 'flex', gap: 4, padding: '16px 20px', overflowX: 'auto',
       }}>
@@ -56,9 +54,9 @@ export function HistoryPage() {
                 flex: '1 0 auto', minWidth: 44, padding: '10px 4px',
                 borderRadius: 14, border: 'none', cursor: 'pointer',
                 background: isSelected
-                  ? 'rgba(245,245,247,0.12)'
+                  ? 'rgba(0,122,255,0.1)'
                   : 'transparent',
-                color: isSelected ? '#F5F5F7' : 'rgba(245,245,247,0.35)',
+                color: isSelected ? '#007AFF' : 'rgba(60,60,67,0.4)',
                 fontFamily: 'inherit',
               }}
             >
@@ -70,7 +68,7 @@ export function HistoryPage() {
                 {hasData && (
                   <span style={{
                     display: 'block', width: 4, height: 4, borderRadius: '50%',
-                    background: '#FF9F0A', margin: '4px auto 0',
+                    background: '#FF9500', margin: '4px auto 0',
                   }} />
                 )}
               </div>
@@ -79,50 +77,48 @@ export function HistoryPage() {
         })}
       </div>
 
-      {/* Summary */}
       {stats && (
         <div style={{ padding: '0 20px 8px' }}>
           <div className="glass-card" style={{ borderRadius: 16, padding: '16px 20px' }}>
             <div style={{ display: 'flex', justifyContent: 'space-around', textAlign: 'center' }}>
               <div>
                 <p style={{
-                  color: '#F5F5F7', fontSize: 22, fontWeight: 500, margin: 0, letterSpacing: -0.5,
+                  color: '#1C1C1E', fontSize: 22, fontWeight: 500, margin: 0, letterSpacing: -0.5,
                 }}>
                   {Math.round(stats.total_calories)}
                 </p>
-                <p style={{ color: 'rgba(245,245,247,0.4)', fontSize: 12, margin: '2px 0 0' }}>千卡</p>
+                <p style={{ color: 'rgba(60,60,67,0.55)', fontSize: 12, margin: '2px 0 0' }}>千卡</p>
               </div>
-              <div style={{ width: 1, background: 'rgba(255,255,255,0.06)' }} />
+              <div style={{ width: 1, background: 'rgba(60,60,67,0.08)' }} />
               <div>
                 <p style={{
-                  color: '#F5F5F7', fontSize: 22, fontWeight: 500, margin: 0, letterSpacing: -0.5,
+                  color: '#1C1C1E', fontSize: 22, fontWeight: 500, margin: 0, letterSpacing: -0.5,
                 }}>
                   {Math.round(stats.total_protein)}
                 </p>
-                <p style={{ color: 'rgba(245,245,247,0.4)', fontSize: 12, margin: '2px 0 0' }}>蛋白质 g</p>
+                <p style={{ color: 'rgba(60,60,67,0.55)', fontSize: 12, margin: '2px 0 0' }}>蛋白质 g</p>
               </div>
-              <div style={{ width: 1, background: 'rgba(255,255,255,0.06)' }} />
+              <div style={{ width: 1, background: 'rgba(60,60,67,0.08)' }} />
               <div>
                 <p style={{
-                  color: '#F5F5F7', fontSize: 22, fontWeight: 500, margin: 0, letterSpacing: -0.5,
+                  color: '#1C1C1E', fontSize: 22, fontWeight: 500, margin: 0, letterSpacing: -0.5,
                 }}>
                   {allMeals.length}
                 </p>
-                <p style={{ color: 'rgba(245,245,247,0.4)', fontSize: 12, margin: '2px 0 0' }}>餐次</p>
+                <p style={{ color: 'rgba(60,60,67,0.55)', fontSize: 12, margin: '2px 0 0' }}>餐次</p>
               </div>
             </div>
           </div>
         </div>
       )}
 
-      {/* Meal list */}
       <div style={{ padding: '0 20px', display: 'flex', flexDirection: 'column', gap: 6, marginTop: 8 }}>
         {loading ? (
-          <p style={{ textAlign: 'center', color: 'rgba(245,245,247,0.3)', padding: 40 }}>加载中...</p>
+          <p style={{ textAlign: 'center', color: 'rgba(60,60,67,0.35)', padding: 40 }}>加载中...</p>
         ) : allMeals.length === 0 ? (
           <div style={{ textAlign: 'center', padding: 60 }}>
             <p style={{ fontSize: 40, margin: '0 0 12px' }}>🍽</p>
-            <p style={{ color: 'rgba(245,245,247,0.35)', fontSize: 15 }}>当天没有记录</p>
+            <p style={{ color: 'rgba(60,60,67,0.4)', fontSize: 15 }}>当天没有记录</p>
           </div>
         ) : (
           allMeals.map((meal) => <MealCard key={meal.id} meal={meal} />)
