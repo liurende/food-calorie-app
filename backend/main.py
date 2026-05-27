@@ -26,9 +26,10 @@ def health():
     return {"status": "ok"}
 
 
-from routers import upload, meals, foods, stats
+from routers import upload, meals, foods, stats, recognize
 
 app.include_router(upload.router)
 app.include_router(meals.router)
 app.include_router(foods.router)
 app.include_router(stats.router)
+app.include_router(recognize.router)
