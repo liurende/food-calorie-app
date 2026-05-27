@@ -26,5 +26,9 @@ def health():
     return {"status": "ok"}
 
 
-# Router registrations will be added in subsequent tasks
-# from routers import upload, meals, recognize, foods, stats
+from routers import upload, meals, foods, stats
+
+app.include_router(upload.router)
+app.include_router(meals.router)
+app.include_router(foods.router)
+app.include_router(stats.router)
