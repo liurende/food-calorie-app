@@ -13,6 +13,8 @@ SEED_FOODS = [
     ("红薯", "Sweet Potato", 0.65, 86, 1.6, 20.1, 0.1, "staple"),
     ("土豆", "Potato", 0.65, 77, 2.0, 17.5, 0.1, "staple"),
     ("小米粥", "Millet Porridge", 0.98, 46, 1.4, 8.4, 0.7, "staple"),
+    ("凉皮", "Cold Noodles", 0.90, 140, 4.0, 25.0, 2.0, "staple"),
+    ("蔬菜沙拉", "Vegetable Salad", 0.40, 45, 1.5, 5.0, 2.5, "vegetable"),
 
     # 肉类 meat
     ("鸡胸肉(熟)", "Chicken Breast (cooked)", 0.98, 165, 31.0, 0.0, 3.6, "meat"),

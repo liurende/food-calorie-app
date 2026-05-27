@@ -20,6 +20,7 @@ def classify_with_vision(image_path: str) -> dict:
         response = client.messages.create(
             model="claude-sonnet-4-6",
             max_tokens=150,
+            thinking={"type": "disabled"},
             messages=[{
                 "role": "user",
                 "content": [
@@ -42,7 +43,12 @@ def classify_with_vision(image_path: str) -> dict:
             }],
         )
 
-        text = response.content[0].text.strip()
+        for block in response.content:
+            if hasattr(block, "text"):
+                text = block.text.strip()
+                break
+        else:
+            return {"name": "unknown", "confidence": 0.0, "source": "fallback", "error": "No text in response"}
         import json
         result = json.loads(text)
         result["source"] = "vision_api"

@@ -13,26 +13,26 @@ class WeightCalculator:
         conn.close()
 
         if row is None:
-            return {
-                "name": food_name,
-                "weight_g": 0,
-                "calories": 0,
-                "protein_g": 0,
-                "carbs_g": 0,
-                "fat_g": 0,
-                "confidence": 0.0,
-                "error": f"Food '{food_name}' not found in density database",
-            }
+            density = 0.7
+            cal_per_100g = 150.0
+            protein_per_100g = 5.0
+            carbs_per_100g = 15.0
+            fat_per_100g = 7.0
+        else:
+            density = row["density_g_cm3"]
+            cal_per_100g = row["calories_per_100g"]
+            protein_per_100g = row["protein_per_100g"] or 0
+            carbs_per_100g = row["carbs_per_100g"] or 0
+            fat_per_100g = row["fat_per_100g"] or 0
 
-        density = row["density_g_cm3"]
         weight_g = round(volume_cm3 * density, 1)
-        calories = round(weight_g * row["calories_per_100g"] / 100.0, 1)
-        protein = round(weight_g * (row["protein_per_100g"] or 0) / 100.0, 1)
-        carbs = round(weight_g * (row["carbs_per_100g"] or 0) / 100.0, 1)
-        fat = round(weight_g * (row["fat_per_100g"] or 0) / 100.0, 1)
+        calories = round(weight_g * cal_per_100g / 100.0, 1)
+        protein = round(weight_g * protein_per_100g / 100.0, 1)
+        carbs = round(weight_g * carbs_per_100g / 100.0, 1)
+        fat = round(weight_g * fat_per_100g / 100.0, 1)
 
         return {
-            "name": row["name"],
+            "name": food_name,
             "weight_g": weight_g,
             "calories": calories,
             "protein_g": protein,

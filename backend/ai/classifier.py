@@ -62,7 +62,9 @@ def _simulated_classify(image_path: str) -> dict:
     import hashlib
 
     labels = get_labels()
-    h = int(hashlib.md5(image_path.encode()).hexdigest(), 16)
+    with open(image_path, "rb") as f:
+        content_hash = hashlib.md5(f.read()).hexdigest()
+    h = int(content_hash, 16)
     idx = h % len(labels)
-    confidence = 0.70 + (h % 25) / 100.0
+    confidence = 0.35 + (h % 25) / 100.0
     return {"name": labels[idx], "confidence": round(confidence, 3), "source": "simulated"}
