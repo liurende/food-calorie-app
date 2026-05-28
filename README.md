@@ -1,13 +1,13 @@
 # 食物热量拍照识别 App
 
-通过多角度拍照识别食物，估算重量并计算热量。支持 50+ 种常见中餐及国际食物。
+通过多角度拍照识别食物，估算重量并计算热量。支持 129 种常见单一食材（主食、蔬菜、肉类、水产、水果等）。
 
 ## 技术栈
 
 - **前端：** React + TypeScript + Vite（移动端优先，iOS 风格浅色主题）
 - **后端：** FastAPI（Python）
 - **数据库：** SQLite
-- **AI：** ONNX 本地分类（MobileNetV3）+ Anthropic Vision API 兜底
+- **AI 识别：** Claude Haiku Vision API（低延迟、低成本，单次识别约 ¥0.00035）
 - **3D 重建：** OpenCV SIFT 特征匹配 + 三角测量 + 凸包体积估算
 
 ## 快速开始（Docker）
@@ -15,7 +15,7 @@
 ### 前置条件
 
 - 安装 [Docker](https://www.docker.com/products/docker-desktop/) 并启动
-- （可选）准备 ONNX 食物分类模型文件，放入 `backend/models/food_classifier.onnx`。没有模型文件也能运行，会自动使用模拟分类
+- 设置 Anthropic API Key 环境变量：`export ANTHROPIC_AUTH_TOKEN="your-api-key"`（用于食物识别，可在 [console.anthropic.com](https://console.anthropic.com) 获取）
 
 ### 方式一：docker-compose（推荐）
 
@@ -24,7 +24,8 @@
 git clone git@github.com:liurende/food-calorie-app.git
 cd food-calorie-app
 
-# 2. 构建并启动
+# 2. 设置 API Key 后构建并启动
+export ANTHROPIC_AUTH_TOKEN="your-api-key"
 docker-compose up -d
 
 # 3. 初始化食物营养数据库（仅首次）
@@ -47,7 +48,7 @@ docker build -t calorie-app .
 # 3. 运行容器
 docker run -d -p 8000:8000 \
   --name calorie-app \
-  -v ./backend/models:/app/models \
+  -e ANTHROPIC_AUTH_TOKEN="your-api-key" \
   -v ./backend/uploads:/app/uploads \
   calorie-app
 
@@ -71,6 +72,9 @@ docker stop calorie-app && docker rm calorie-app
 ## 本地开发
 
 ```bash
+# 设置 API Key
+export ANTHROPIC_AUTH_TOKEN="your-api-key"
+
 # 后端
 cd backend
 pip install -r requirements.txt
@@ -80,7 +84,7 @@ uvicorn main:app --reload --host 0.0.0.0 --port 8000
 # 前端（新终端）
 cd frontend
 npm install
-npm run dev                   # http://localhost:5173
+npm run dev                   # https://localhost:5173
 
 # 运行测试
 cd backend
@@ -115,8 +119,7 @@ python -m pytest tests/ -v
 │   │   ├── reconstruction.py    # 3D 重建与体积估算
 │   │   └── weight.py           # 密度查询 -> 重量/热量
 │   ├── ai/                  # AI 分类
-│   │   ├── classifier.py       # ONNX 分类（模拟兜底）
-│   │   └── fallback.py         # Vision API 兜底
+│   │   └── classifier.py       # Claude Haiku Vision API
 │   └── tests/               # 后端测试
 ├── frontend/
 │   └── src/

@@ -4,6 +4,7 @@ services:
     ports:
       - "8000:8000"
     volumes:
-      - ./backend/models:/app/models
       - ./backend/uploads:/app/uploads
       - ./backend/calorie.db:/app/calorie.db
+    environment:
+      - ANTHROPIC_AUTH_TOKEN=${ANTHROPIC_AUTH_TOKEN}
