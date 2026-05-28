@@ -1,0 +1,14 @@
+node_modules/
+__pycache__/
+*.pyc
+*.pyo
+*.egg-info/
+dist/
+build/
+*.db
+uploads/
+.git/
+.claude/
+.superpowers/
+*.md
+test.jpg
