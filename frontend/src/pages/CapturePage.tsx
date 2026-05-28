@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useCamera } from '../hooks/useCamera';
 import { api } from '../api/client';
@@ -12,15 +12,15 @@ const ANGLE_HINTS = [
 
 export function CapturePage() {
   const navigate = useNavigate();
-  const { videoRef, streaming, startCamera, stopCamera, captureFrame } = useCamera();
+  const { videoRef, streaming, error, startCamera, stopCamera, captureFrame } = useCamera();
   const [step, setStep] = useState(0);
   const [captured, setCaptured] = useState<string[]>([]);
   const [processing, setProcessing] = useState(false);
+  const [failure, setFailure] = useState<string | null>(null);
 
-  useEffect(() => {
-    startCamera();
-    return () => stopCamera();
-  }, []);
+  const handleStartCamera = async () => {
+    await startCamera();
+  };
 
   const handleCapture = () => {
     const frame = captureFrame();
@@ -35,6 +35,14 @@ export function CapturePage() {
       stopCamera();
       processImages(newCaptured);
     }
+  };
+
+  const handleReset = () => {
+    setStep(0);
+    setCaptured([]);
+    setProcessing(false);
+    setFailure(null);
+    startCamera();
   };
 
   const processImages = async (frames: string[]) => {
@@ -56,12 +64,63 @@ export function CapturePage() {
       navigate('/result', { state: { results, images: frames } });
     } catch (e) {
       console.error('Processing failed:', e);
-      alert('识别失败，请重试');
-    } finally {
       setProcessing(false);
+      setFailure('识别失败，请检查网络连接后重试');
     }
   };
 
+  // --- Camera not started yet: permission screen ---
+  if (!streaming && !processing && !failure) {
+    return (
+      <div style={{
+        background: '#F2F2F7', minHeight: '100vh', display: 'flex',
+        flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        padding: 40,
+      }}>
+        <div style={{
+          width: 72, height: 72, borderRadius: 20,
+          background: 'linear-gradient(135deg, #007AFF 0%, #5856D6 100%)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: 24,
+        }}>
+          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="1.8" strokeLinecap="round">
+            <path d="M23 7l-5 5 5 5" />
+            <rect x="1" y="5" width="15" height="14" rx="3" fill="none" stroke="white" />
+            <circle cx="8.5" cy="12" r="1.5" fill="white" stroke="none" />
+          </svg>
+        </div>
+        <h2 style={{ color: '#1C1C1E', fontSize: 20, fontWeight: 600, margin: '0 0 8px' }}>
+          多角度拍摄
+        </h2>
+        <p style={{ color: 'rgba(60,60,67,0.5)', fontSize: 14, textAlign: 'center', lineHeight: 1.5, margin: '0 0 32px' }}>
+          需要拍摄 3 张食物照片<br />正面 · 斜角 · 侧面
+        </p>
+
+        {error ? (
+          <div style={{ textAlign: 'center', width: '100%' }}>
+            <p style={{ color: '#FF3B30', fontSize: 14, marginBottom: 16 }}>{error}</p>
+            <button className="btn-primary" onClick={handleStartCamera} style={{ width: '100%' }}>
+              重试
+            </button>
+          </div>
+        ) : (
+          <button className="btn-primary" onClick={handleStartCamera} style={{ width: '100%', maxWidth: 300 }}>
+            打开摄像头
+          </button>
+        )}
+
+        <button
+          className="btn-ghost"
+          onClick={() => navigate('/')}
+          style={{ marginTop: 16, color: 'rgba(60,60,67,0.4)', fontSize: 15 }}
+        >
+          返回
+        </button>
+      </div>
+    );
+  }
+
+  // --- Processing loading screen ---
   if (processing) {
     return (
       <div style={{
@@ -85,6 +144,46 @@ export function CapturePage() {
     );
   }
 
+  // --- Failure screen ---
+  if (failure) {
+    return (
+      <div style={{
+        background: '#F2F2F7', minHeight: '100vh', display: 'flex',
+        flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+        padding: 40,
+      }}>
+        <div style={{
+          width: 64, height: 64, borderRadius: '50%', background: 'rgba(255,59,48,0.1)',
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          marginBottom: 20,
+        }}>
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#FF3B30" strokeWidth="2" strokeLinecap="round">
+            <circle cx="12" cy="12" r="10" />
+            <line x1="15" y1="9" x2="9" y2="15" />
+            <line x1="9" y1="9" x2="15" y2="15" />
+          </svg>
+        </div>
+        <h2 style={{ color: '#1C1C1E', fontSize: 18, fontWeight: 600, margin: '0 0 6px' }}>
+          识别失败
+        </h2>
+        <p style={{ color: 'rgba(60,60,67,0.5)', fontSize: 14, textAlign: 'center', marginBottom: 28 }}>
+          {failure}
+        </p>
+        <button className="btn-primary" onClick={handleReset} style={{ width: '100%', maxWidth: 300 }}>
+          重新拍摄
+        </button>
+        <button
+          className="btn-ghost"
+          onClick={() => navigate('/')}
+          style={{ marginTop: 12, color: 'rgba(60,60,67,0.4)', fontSize: 15 }}
+        >
+          返回首页
+        </button>
+      </div>
+    );
+  }
+
+  // --- Main capture UI ---
   return (
     <div style={{ background: '#F2F2F7', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       {/* Home indicator spacer */}
@@ -118,19 +217,18 @@ export function CapturePage() {
 
       {/* Camera viewfinder */}
       <div style={{ margin: '0 20px', flex: 1, position: 'relative' }}>
-        {streaming && (
-          <video
-            ref={videoRef}
-            autoPlay
-            playsInline
-            muted
-            style={{
-              width: '100%', height: '100%', objectFit: 'cover',
-              borderRadius: 36, border: '1px solid rgba(60,60,67,0.08)',
-              background: '#000',
-            }}
-          />
-        )}
+        <video
+          ref={videoRef}
+          autoPlay
+          playsInline
+          muted
+          style={{
+            width: '100%', height: '100%', objectFit: 'cover',
+            borderRadius: 36, border: '1px solid rgba(60,60,67,0.08)',
+            background: '#000',
+            display: streaming ? 'block' : 'none',
+          }}
+        />
         {/* Viewfinder overlay */}
         <div style={{
           position: 'absolute', inset: 0, pointerEvents: 'none', borderRadius: 36,

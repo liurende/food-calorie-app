@@ -1,25 +1,31 @@
-import { useState, useRef, useCallback } from 'react';
+import { useState, useRef, useCallback, useEffect } from 'react';
 
 export function useCamera() {
   const videoRef = useRef<HTMLVideoElement | null>(null);
   const streamRef = useRef<MediaStream | null>(null);
   const [streaming, setStreaming] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+
+  // Attach stream to video element once it mounts in the DOM
+  useEffect(() => {
+    if (streaming && streamRef.current && videoRef.current) {
+      videoRef.current.srcObject = streamRef.current;
+      videoRef.current.play().catch(console.error);
+    }
+  }, [streaming]);
 
   const startCamera = useCallback(async () => {
+    setError(null);
     try {
       const stream = await navigator.mediaDevices.getUserMedia({
         video: { facingMode: 'environment', width: { ideal: 1080 }, height: { ideal: 1440 } },
         audio: false,
       });
       streamRef.current = stream;
-      if (videoRef.current) {
-        videoRef.current.srcObject = stream;
-        await videoRef.current.play();
-      }
       setStreaming(true);
     } catch (e) {
       console.error('Camera access denied:', e);
-      alert('无法访问摄像头，请检查权限设置');
+      setError('无法访问摄像头，请检查权限设置');
     }
   }, []);
 
@@ -27,6 +33,7 @@ export function useCamera() {
     streamRef.current?.getTracks().forEach((t) => t.stop());
     streamRef.current = null;
     setStreaming(false);
+    setError(null);
   }, []);
 
   const captureFrame = useCallback((): string | null => {
@@ -40,5 +47,5 @@ export function useCamera() {
     return canvas.toDataURL('image/jpeg', 0.9);
   }, []);
 
-  return { videoRef, streaming, startCamera, stopCamera, captureFrame };
+  return { videoRef, streaming, error, startCamera, stopCamera, captureFrame };
 }

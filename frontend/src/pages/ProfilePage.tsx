@@ -23,6 +23,7 @@ export function ProfilePage() {
   const [tdee, setTdee] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
+  const [toast, setToast] = useState<string | null>(null);
 
   const [form, setForm] = useState({
     name: '',
@@ -68,6 +69,8 @@ export function ProfilePage() {
       const result = await api.updateProfile(payload);
       setBmr(result.bmr);
       setTdee(result.tdee);
+      setToast('设置已保存');
+      setTimeout(() => setToast(null), 2000);
     } catch (e) {
       console.error('Save failed:', e);
       alert('保存失败');
@@ -235,6 +238,24 @@ export function ProfilePage() {
       )}
 
       <TabBar />
+
+      {toast && (
+        <div style={{
+          position: 'fixed', bottom: 100, left: '50%', transform: 'translateX(-50%)',
+          background: 'rgba(30,30,32,0.92)', backdropFilter: 'blur(20px)',
+          WebkitBackdropFilter: 'blur(20px)', borderRadius: 20,
+          padding: '12px 28px', border: '1px solid rgba(255,255,255,0.1)',
+          zIndex: 999, animation: 'toast-in 0.3s ease',
+        }}>
+          <style>{`@keyframes toast-in { from { opacity: 0; transform: translateX(-50%) translateY(10px); } }`}</style>
+          <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="#34C759" strokeWidth="2.5" strokeLinecap="round">
+              <polyline points="20 6 9 17 4 12" />
+            </svg>
+            <span style={{ color: '#F5F5F7', fontSize: 14, fontWeight: 500 }}>{toast}</span>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

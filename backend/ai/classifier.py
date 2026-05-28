@@ -1,70 +1,62 @@
 import os
-import numpy as np
+import base64
+from anthropic import Anthropic
 from PIL import Image
-import json
-
-MODEL_DIR = os.path.join(os.path.dirname(__file__), "..", "models")
-LABELS_PATH = os.path.join(MODEL_DIR, "food_labels.json")
 
 
-def get_labels() -> list[str]:
-    if os.path.exists(LABELS_PATH):
-        with open(LABELS_PATH) as f:
-            return json.load(f)
-    return [
-        "白米饭", "馒头", "面条(煮)", "面包", "玉米", "红薯", "土豆",
-        "鸡胸肉(熟)", "鸡腿肉(熟)", "猪里脊(熟)", "牛肉(瘦,熟)", "羊肉(熟)", "鸭肉(熟)",
-        "三文鱼(熟)", "虾仁(熟)", "炒鸡蛋", "煮鸡蛋", "西兰花(熟)", "黄瓜",
-        "胡萝卜(熟)", "菠菜(熟)", "番茄炒蛋", "炒青菜", "苹果", "香蕉", "橙子", "葡萄",
-        "宫保鸡丁", "红烧肉", "糖醋里脊", "鱼香肉丝", "回锅肉", "水煮鱼",
-        "麻婆豆腐", "炒豆腐", "鸡蛋汤", "炸鸡腿", "薯条", "汉堡", "披萨",
-        "炒豆角", "带鱼(熟)", "馒头", "全麦面包", "小米粥", "糙米饭",
-        "酸菜鱼", "地三鲜", "干煸四季豆", "紫菜蛋花汤", "炒鸡蛋",
-    ]
+THUMBNAIL_SIZE = 224
+
+
+def _resize_to_base64(image_path: str) -> tuple[str, str]:
+    """Resize image to thumbnail and return (base64_data, media_type)."""
+    ext = os.path.splitext(image_path)[1].lower().replace(".", "")
+    media_type = "image/jpeg" if ext in ("jpg", "jpeg") else f"image/{ext}"
+
+    img = Image.open(image_path).convert("RGB")
+    img.thumbnail((THUMBNAIL_SIZE, THUMBNAIL_SIZE), Image.LANCZOS)
+
+    import io
+    buf = io.BytesIO()
+    img.save(buf, format="JPEG", quality=75)
+    return base64.b64encode(buf.getvalue()).decode("utf-8"), "image/jpeg"
 
 
 def classify_food(image_path: str) -> dict:
-    """Classify food from image. Tries ONNX model, returns result with confidence."""
-    model_path = os.path.join(MODEL_DIR, "food_classifier.onnx")
+    """Identify food in image using Claude Haiku Vision."""
+    api_key = os.environ.get("ANTHROPIC_AUTH_TOKEN", "")
+    if not api_key:
+        return {"name": "unknown", "confidence": 0.0, "source": "none", "error": "No API key"}
 
-    if not os.path.exists(model_path):
-        return _simulated_classify(image_path)
+    image_data, media_type = _resize_to_base64(image_path)
 
-    try:
-        import onnxruntime as ort
+    client = Anthropic(api_key=api_key)
 
-        session = ort.InferenceSession(model_path)
-        img = Image.open(image_path).convert("RGB").resize((224, 224))
-        img_array = np.array(img, dtype=np.float32)
-        img_array = np.transpose(img_array, (2, 0, 1))
-        img_array = np.expand_dims(img_array, axis=0)
-        img_array = (img_array - 127.5) / 127.5
+    response = client.messages.create(
+        model="claude-haiku-4-5-20251001",
+        max_tokens=20,
+        thinking={"type": "disabled"},
+        messages=[{
+            "role": "user",
+            "content": [
+                {
+                    "type": "image",
+                    "source": {
+                        "type": "base64",
+                        "media_type": media_type,
+                        "data": image_data,
+                    },
+                },
+                {
+                    "type": "text",
+                    "text": '这张照片里是一种什么食物？只回复食物名称（中文），例如土豆块、白米饭、鸡胸肉。不要其他内容。',
+                },
+            ],
+        }],
+    )
 
-        input_name = session.get_inputs()[0].name
-        outputs = session.run(None, {input_name: img_array})
-        probs = outputs[0][0]
-        top_idx = int(np.argmax(probs))
-        confidence = float(probs[top_idx])
+    for block in response.content:
+        if hasattr(block, "text"):
+            name = block.text.strip()
+            return {"name": name, "confidence": 0.9, "source": "haiku"}
 
-        labels = get_labels()
-        if top_idx < len(labels):
-            return {"name": labels[top_idx], "confidence": round(confidence, 3), "source": "onnx"}
-
-        return {"name": "unknown", "confidence": 0.0, "source": "onnx"}
-
-    except Exception as e:
-        print(f"ONNX inference failed: {e}, falling back to simulated")
-        return _simulated_classify(image_path)
-
-
-def _simulated_classify(image_path: str) -> dict:
-    """Simulated classifier for development without ONNX model file."""
-    import hashlib
-
-    labels = get_labels()
-    with open(image_path, "rb") as f:
-        content_hash = hashlib.md5(f.read()).hexdigest()
-    h = int(content_hash, 16)
-    idx = h % len(labels)
-    confidence = 0.35 + (h % 25) / 100.0
-    return {"name": labels[idx], "confidence": round(confidence, 3), "source": "simulated"}
+    return {"name": "unknown", "confidence": 0.0, "source": "haiku", "error": "No text in response"}

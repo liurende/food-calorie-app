@@ -3,7 +3,6 @@ from pydantic import BaseModel
 from engine.reconstruction import VolumeEstimator
 from engine.weight import WeightCalculator
 from ai.classifier import classify_food
-from models import RecognizeResult
 
 router = APIRouter(prefix="/api")
 
@@ -23,12 +22,6 @@ def recognize_food(req: RecognizeRequest) -> list[dict]:
 
     primary_image = req.image_paths[0]
     classification = classify_food(primary_image)
-
-    if classification["confidence"] < 0.7:
-        from ai.fallback import classify_with_vision
-        fallback = classify_with_vision(primary_image)
-        if fallback.get("confidence", 0) > classification["confidence"]:
-            classification = fallback
 
     calculator = WeightCalculator()
     result = calculator.calculate(classification["name"], volume_result["volume_cm3"])

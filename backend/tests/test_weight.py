@@ -17,7 +17,9 @@ def test_calculate_known_food():
 
 
 def test_unknown_food():
+    """Unknown food uses sensible defaults (density=0.7, cal=150/100g)."""
     calc = WeightCalculator()
     result = calc.calculate("外星食物", 100.0)
-    assert "error" in result
-    assert result["confidence"] == 0.0
+    assert result["name"] == "外星食物"
+    assert result["weight_g"] == pytest.approx(70.0, rel=0.1)  # 100cm³ × 0.7
+    assert result["calories"] == pytest.approx(105.0, rel=0.1)  # 70g × 150/100
